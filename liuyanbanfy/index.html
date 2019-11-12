@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			#liu {
+				width: 580px;
+				height: 565px;
+				text-align: center;
+				line-height: 25px;
+				background: url(face/b380da82f43b.jpg)no-repeat;
+				float: left;
+				overflow: hidden;
+			}
+			#liu1
+			{
+				margin-top: 10px;
+				width: 580px;
+				height: 450px;
+				overflow: hidden;
+				overflow-y: auto;
+			}
+
+
+			body {
+				width: 1200px;
+				height: 500px;
+				margin: 0 auto;
+			}
+
+			.null {
+				height: 20px;
+			}
+
+			li {
+				padding-top: 55px;
+			}
+
+			form {
+				margin-top: 25px;
+				border-radius: 5px;
+				width: 500px;
+				height: 500px;
+				margin-left: 700px;
+				border: 10px solid pink;
+				color: #FFC0CB;
+				font-size: 16px;
+				padding: 10px;
+			}
+
+			form div {
+				padding: 20px;
+			}
+
+			.sp1 {
+				float: left;
+				margin-left: 50px;
+				padding: 5px;
+			}
+
+			.div2 input {
+				width: 200px;
+			}
+
+			.div3 input {
+				width: 200px;
+			}
+
+			.div5 input {
+				width: 50px;
+				height: 30px;
+				background: #FFC0CB;
+				border: 2px solid deeppink;
+				margin-left: 100px;
+				margin-top: -20px;
+			}
+
+			.div6 button {
+				font-size: 10px;
+				width: 50px;
+				height: 30px;
+				background: #FFC0CB;
+				border: 2px solid deeppink;
+				margin-left: 200px;
+				margin-top: -69px;
+				float: left;
+			}
+
+			.div7 {
+				display: none;
+				width: 500px;
+				height: 500px;
+				background: url(face/皮卡皮卡.jpg)no-repeat;
+
+			}
+			.login
+			{
+				border: 3px solid pink;
+				width: 200px;
+				height: 200px;
+				margin: 0 auto;
+				text-align: center;
+				border-radius: 200px;
+				
+			}
+			.login a
+			{
+				line-height: 100px;
+				font-size: 18px;
+				color: deeppink;
+				text-decoration: none;
+				
+			}
+			#barcon
+			{
+				text-decoration: none;
+				width: 100%;
+				height: 20px;
+				color: #FFC0CB;
+				background: #FFFFFF;
+				padding:5px;
+				margin-left: 5px;
+				margin-top: 10px;
+				text-align: center;
+			}
+			#t1
+			{
+				border: 1px solid pink;
+				border-radius: 3px;
+				background: #FFFFFF;
+				height: 20px;
+			}
+			#bt2
+			{
+				width: 70px;
+				height: 30px;
+				border:1px solid pink;
+				border-radius: 2px;
+				background: #FFFFFF;
+				margin-left: 5px;
+				color: deeppink;
+			}
+			.barcon input
+			{
+				width: 30px;
+				height: 30px;
+				border:1px solid pink;
+				border-radius: 2px;
+				background: #FFFFFF;
+				margin-left: 5px;
+				color: deeppink;
+			}
+			.barcon a
+			{
+				text-decoration: none;
+				width: 500px;
+				height: 20px;
+				color: deeppink;
+				border:1px solid deeppink;
+				border-radius: 2px;
+				background: #FFFFFF;
+				padding:5px;
+				margin-left: 5px;
+			}
+		</style>
+	</head>
+	<script src="js/jquery-1.11.2.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/cookie.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/md5.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/ccbb.js"></script>
+	<script type="text/javascript">
+		if ($.getCookie(hex_md5("login")) == hex_md5("success" + $.getCookie("adminName") + $.getCookie("sessionId"))) {
+			document.write("欢迎" + $.getCookie("adminName"))
+		}
+
+		$(function() {
+			$.ajax({
+				url: "shuzu.php",
+				type: "GET",
+				dataType: "json",
+				success: function(data) {
+					data = data.data;
+					var str = "<ul>"
+					$.each(data, function(index, value) {
+							if ($.getCookie(hex_md5("login")) == hex_md5("success" + $.getCookie("adminName") + $.getCookie(
+									"sessionId"))) {
+								str += "<li><img src=face/" + value.face + ">作者:" + value.author + "<br>标题:" + value.title + "<br>内容:" +
+									value.content + "<br>时间:" + value.addTime + "<br>管理员回复:" + value.reply +
+									"<br><a href=huifu.html?messageId=" + value.messageId + ">回复</a>" + "<br><a href=delete.php?messageId=" +
+									value.messageId + ">删除</a>" + "<br></li><br><hr>";
+
+								$("#liu1").html(str + "</ul>");
+							} else {
+								str += "<li><img src=face/" + value.face + ">作者:" + value.author + "<br>标题:" + value.title + "<br>内容:" +
+									value.content + "<br>时间:" + value.addTime + "<br>管理员回复:" + value.reply + "</li>";
+
+								$("#liu1").html(str + "</ul>");
+							}
+
+						}
+
+					)
+					goPage(1, 3);
+				},
+				complete: function() {
+					$("#bt1").click(function() {
+						var form1 = document.getElementById("form1");
+						var formdata = new FormData(form1);
+						$.ajax({
+							url: "data1.php",
+							type: "POST",
+							processData: false,
+							contentType: false,
+							data: formdata,
+							dataType: "json",
+							success: function(data) {
+								if (data.status == "1001") {
+									location.href = "index.html";
+								} else {
+									alert("发布失败");
+								}
+							}
+						})
+					})
+				}
+			})
+
+		})
+
+		function goPage(pno, psize) {
+			var liu = document.getElementById("liu");
+			var lis = liu.querySelectorAll("li");
+			var num = lis.length;
+			var totalPage = 0; //总页数
+			var pageSize = psize; //每页显示行数
+			var str = "<div id='yeshu'>";
+			//总共分几页
+			if (num / pageSize > parseInt(num / pageSize)) {
+				totalPage = parseInt(num / pageSize) + 1;
+			} else {
+				totalPage = parseInt(num / pageSize);
+			}
+			var currentPage = pno; //当前页数
+			var startRow = (currentPage - 1) * pageSize + 1; //开始显示的行 31
+			var endRow = currentPage * pageSize; //结束显示的行  40
+			endRow = (endRow > num) ? num : endRow; //40
+			//遍历显示数据实现分页
+			for (var i = 1; i < (num + 1); i++) {
+				var irow = lis[i - 1];
+				if (i >= startRow && i <= endRow) {
+					irow.style.display = "block";
+				} else {
+					irow.style.display = "none";
+				}
+			}
+			 var tempStr=""; //= "共" + num + "条记录 分" + totalPage + "页 当前第" + currentPage + "页";
+			if (currentPage > 1) {
+				tempStr += "<a href=\"#\" onClick=\"goPage(" + (1) + "," + psize + ")\">首页</a>";
+				tempStr += "<a href=\"#\" onClick=\"goPage(" + (currentPage - 1) + "," + psize + ")\">上一页</a>"
+			} else {
+				tempStr += "首页";
+				tempStr += "上一页";
+			}
+			if (currentPage < totalPage) {
+				tempStr += "<a href=\"#\" onClick=\"goPage(" + (currentPage + 1) + "," + psize + ")\">下一页</a>";
+				tempStr += "<a href=\"#\" onClick=\"goPage(" + (totalPage) + "," + psize + ")\">尾页</a>";
+			} else {
+				tempStr += "下一页";
+				tempStr += "尾页";
+			}
+			tempStr +="共" + num + "条记录 分" + totalPage + "页 当前第" + currentPage + "页";
+			if (totalPage > 5 && currentPage <= 3) {
+				currentPage = 3;
+			}
+			if (totalPage - currentPage < 2) {
+
+				currentPage = totalPage - 2;
+			}
+			for (var k = currentPage - 2; k <= currentPage + 2; k++) {
+
+				if (k <= 0) {
+					continue;
+				}
+				str += "<input type='button' value=" + k + ">";
+			}
+			if (totalPage <= 5) {
+				str = "";
+				for (var k = 1; k <= totalPage; k++) {
+					str += "<input type='button' value=" + k + ">";
+				}
+			}
+			
+			str += "</div>";
+			document.getElementById("barcon").innerHTML = tempStr +
+				"<input autocomplete=off id=t1 type=text>页<input type=button id=bt2 value=点击跳转>" + str;
+			var bt2 = document.getElementById("bt2");
+			var yeshu = document.getElementById("yeshu");
+			bt2.onclick = function() {
+				if (document.getElementById("t1").value > totalPage) {
+					alert("请输入正确页数");
+				} else {
+					goPage(document.getElementById("t1").value, psize);
+				}
+
+			}
+
+			// var bts=document.getElementById("yeshu").querySelectorAll("input");
+			//  for(var i=0;i<bts.length;i++){
+			// 	bts[i].onclick=function(){
+			// 		var b=Number(this.value);
+			// 		goPage(b,psize);
+			// 	}
+			//  }
+			$("#yeshu input").click(function() {
+				var b = Number(this.value);
+				goPage(b, psize);
+				goPage(b, psize);
+			})
+			$("button").click(function() {
+				$(".div1").hide();
+				$(".div2").hide();
+				$(".div3").hide();
+				$(".div4").hide();
+				$(".div5").hide();
+				$(".div6").hide();
+				$(".div7").show();
+			})
+		}
+	</script>
+	<body>
+		<div class="container">
+
+			<div class="content">
+
+				<div id="liu">
+					<div id="liu1">
+						
+					</div>
+				</div>
+
+				<form id="form1">
+					<div class="div7">
+
+					</div>
+					<div class="div1">
+						<span class="sp1">头像:</span><input type="file" name="face" id="face" value="" />
+					</div>
+					<div class="div2">
+						发帖人昵称：<input type="text" name="author" placeholder="输入您的昵称哦!" /><br>
+					</div>
+					<div class="div3">
+						<span class="sp1">标题:</span><input type="text" name="title" placeholder="正能量的标题哦!" /><br>
+					</div>
+					<div class="div4">
+						<span class="sp1">内容:</span><textarea rows="10" cols="40" name="content" placeholder="内容不要违规哦!"></textarea> <br>
+					</div>
+					<div class="div5">
+						<input type="button" id="bt1" value="发布">
+					</div>
+					<div class="div6">
+						<button>放弃</button>
+					</div>
+				</form><br>
+				<div class="barcon" id="barcon" name="barcon"></div><br>
+				<div class="login">
+					<a href="login.html">管理员登录</a><br>
+					<a href="loginout.php">管理员注销</a>
+				</div>
+				
+			</div>
+		</div>
+	</body>
+</html>
